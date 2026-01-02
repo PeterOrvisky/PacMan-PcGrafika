@@ -1,0 +1,14 @@
+Node
+CollisionShape2D
+Area2D
+Node2D
+TileMap
+VBoxContainer
+Label
+HBoxContainer
+CanvasLayer
+AudioStreamPlayer2D
+Marker2D
+Timer
+AnimationPlayer
+NavigationAgent2D

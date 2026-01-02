@@ -1,0 +1,78 @@
+extends Node
+
+# Premenné prepojené na relevantné uzly
+@onready var tile_map = $TileMap                      # Hlavná mapa
+@onready var camera = $Camera2D                      # Hlavná kamera
+@onready var ui = $UI                                # Užívateľské rozhranie
+@onready var player = $Player                        # Hlavný hráč
+@onready var pellets = $Pellets                      # Containery pre peletky
+@onready var connector = $Connector                  # Uzol na prechod medzi stranami scény
+@onready var movement_targets = $MovementTargets     # Pohyby cieľov pre duchov
+@onready var ghosts = $Ghosts                        # Správa duchov
+@onready var points_manager = $PointManager          # Správca bodov
+@onready var secret_area = $SecretArea               # Trigger pre tajnú oblasť
+@onready var sound_players = $SoundPlayers           # Zvukové prehrávače
+
+# Premenné pre tajnú oblasť
+@export var secret_scene: PackedScene                # Tajná scéna, priradíš v editore
+var current_scene_points = 0                         # Uchová body hráča
+
+func _ready():
+	# Inicializácia hry
+	print("Main script is ready!")
+
+	# Napojenie hráča na udalosti (názov metódy ako reťazec)
+	player.connect("player_died", self, "_on_player_died")
+
+	# Napojenie tajnej oblasti na signál
+	secret_area.connect("secret_entered", self, "_on_secret_area_entered")
+
+# Udalosť smrti hráča
+func _on_player_died(new_lives):
+	if new_lives > 0:
+		print("Player lost a life. Remaining lives: %d" % new_lives)
+	else:
+		print("Game Over! Restarting the game.")
+		restart_game()
+
+# Reakcia na vstup do tajnej oblasti
+func _on_secret_area_entered():
+	print("Entering the secret area...")
+	
+	# Uchovaj aktuálne body
+	current_scene_points = points_manager.points
+	print("Saved current points: %d" % current_scene_points)
+	
+	# Načítaj tajnú scénu a aktivuj ju
+	var secret_scene_instance = secret_scene.instance()
+	get_tree().current_scene.queue_free()  # Odstráň aktuálnu hlavnú scénu
+	get_tree().root.add_child(secret_scene_instance)
+	get_tree().current_scene = secret_scene_instance
+
+	# Nastav pozíciu hráča na začiatočnú pre tajnú scénu
+	var secret_start_pos = secret_scene_instance.get_node("StartPosition")
+	player.position = secret_start_pos.global_position
+
+	# Prenes body do tajnej oblasti
+	secret_scene_instance.get_node("PelletsManager").points_manager.points = current_scene_points
+
+# Udalosť návratu do hlavnej scény
+func return_to_main_scene():
+	print("Returning to the main scene...")
+
+	# Načítanie hlavnej scény
+	var main_scene_instance = load("res://path/to/Main.tscn").instance()
+	get_tree().current_scene.queue_free()  # Zbaviť aktuálnej tajnej scény
+	get_tree().root.add_child(main_scene_instance)
+	get_tree().current_scene = main_scene_instance
+
+	# Obnov pozíciu hráča a body
+	var main_start_pos = main_scene_instance.get_node("StartPosition")
+	player.position = main_start_pos.global_position
+	var main_points_manager = main_scene_instance.get_node("PointManager")
+	main_points_manager.points += current_scene_points
+
+# Udalosť konca hry - reštart celej scény
+func restart_game():
+	print("Reloading the current scene...")
+	get_tree().reload_current_scene()

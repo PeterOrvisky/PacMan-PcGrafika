@@ -1,0 +1,1395 @@
+[gd_scene load_steps=37 format=3 uid="uid://bbt240sfo1x3m"]
+
+[ext_resource type="Texture2D" uid="uid://di7lt8ehvdxdh" path="res://Assets/Walls/wall_atlas.png" id="1_xu7rp"]
+[ext_resource type="Script" uid="uid://c6h0st4xobltb" path="res://Scenes/tilemap.gd" id="2_xb1xf"]
+[ext_resource type="PackedScene" uid="uid://8ae61tf8kdk6" path="res://Scenes/connector.tscn" id="3_xb1xf"]
+[ext_resource type="Script" uid="uid://bevxn75pdlg03" path="res://Scenes/connector-2.gd" id="4_fry50"]
+[ext_resource type="PackedScene" uid="uid://ukwapkieps1j" path="res://Scenes/pacman.tscn" id="5_gkyki"]
+[ext_resource type="Script" uid="uid://d3sm1gr4fb2ic" path="res://Scenes/pellets_manager.gd" id="6_w8ivb"]
+[ext_resource type="PackedScene" uid="uid://c3bdckt5gepyt" path="res://Scenes/pellet.tscn" id="7_imqcb"]
+[ext_resource type="PackedScene" uid="uid://dwpsv6dr0a3bx" path="res://Scenes/large_pellet.tscn" id="8_q7884"]
+[ext_resource type="PackedScene" uid="uid://deo6paroi158x" path="res://Scenes/ui.tscn" id="9_imqcb"]
+[ext_resource type="Script" uid="uid://ck52c513ycyrt" path="res://Scenes/points_manager.gd" id="10_q7884"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_8iang"]
+tile_data = PackedInt32Array(0, 458752, 0, 65536, 65536, 1, 1, 131072, 0, 65537, 196608, 0, 2, 131072, 0, 65538, 196608, 0, 3, 131072, 0, 65539, 196608, 1, 131075, 327680, 0, 196611, 327680, 0, 262147, 65536, 1, 4, 131072, 0, 65540, 327680, 1, 131076, 262144, 0, 196612, 262144, 0, 262148, 0, 1, 5, 131072, 0, 65541, 196608, 0, 6, 131072, 0, 65542, 196608, 0, 7, 393216, 0, 65543, 0, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_rkv41"]
+tile_data = PackedInt32Array(0, 458752, 0, 65536, 327680, 0, 131072, 65536, 1, 1, 131072, 0, 131073, 196608, 0, 2, 131072, 0, 131074, 196608, 0, 3, 131072, 0, 131075, 196608, 0, 4, 393216, 0, 65540, 262144, 0, 131076, 0, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_c0jkg"]
+tile_data = PackedInt32Array(0, 458752, 0, 65536, 327680, 0, 131072, 65536, 1, 1, 131072, 0, 131073, 196608, 0, 2, 131072, 0, 131074, 196608, 0, 3, 393216, 0, 65539, 262144, 0, 131075, 0, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_tjq8e"]
+tile_data = PackedInt32Array(0, 458752, 0, 65536, 327680, 0, 131072, 327680, 0, 196608, 327680, 0, 262144, 65536, 1, 1, 393216, 0, 65537, 262144, 0, 131073, 262144, 0, 196609, 262144, 0, 262145, 0, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_4a351"]
+tile_data = PackedInt32Array(0, 458752, 0, 65536, 65536, 1, 1, 131072, 0, 65537, 196608, 0, 2, 131072, 0, 65538, 196608, 0, 3, 131072, 0, 65539, 196608, 0, 4, 393216, 0, 65540, 0, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_nsm6f"]
+tile_data = PackedInt32Array(196608, 131072, 0, 262144, 196608, 0, 1, 458752, 0, 65537, 327680, 0, 131073, 327680, 0, 196609, 131072, 1, 262145, 196608, 0, 2, 393216, 0, 65538, 262144, 0, 131074, 262144, 0, 196610, 262144, 1, 262146, 196608, 0, 196611, 131072, 0, 262147, 196608, 0)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_dcaco"]
+vertices = PackedVector2Array(10.5, -12, 12, -12, 12, 12, 10.5, 12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(10.5, -12, 12, -12, 12, 12, 10.5, 12)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_y7lp7"]
+vertices = PackedVector2Array(-10.5, 12, -12, 12, -12, -12, -10.5, -12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-10.5, -12, -12, -12, -12, 12, -10.5, 12)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_5rq7b"]
+vertices = PackedVector2Array(-0.75, -0.75, -0.75, -12, 0.75, -12, 0.75, -0.75, 12, -0.75, 12, 0.75, 0.75, 0.75, -0.75, 0.75, 0.75, 12, -0.75, 12, -12, 0.75, -12, -0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 4, 5, 6), PackedInt32Array(0, 3, 6, 7), PackedInt32Array(6, 8, 9, 7), PackedInt32Array(0, 7, 10, 11)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-0.75, -12, 0.75, -12, 0.75, -0.75, 12, -0.75, 12, 0.75, 0.75, 0.75, 0.75, 12, -0.75, 12, -0.75, 0.75, -12, 0.75, -12, -0.75, -0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_wcdvl"]
+vertices = PackedVector2Array(-0.75, -12, 0.75, -12, 0.75, 12, -0.75, 12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-0.75, -12, 0.75, -12, 0.75, 12, -0.75, 12)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_2gk78"]
+vertices = PackedVector2Array(0.75, -0.75, 12, -0.75, 12, 0.75, 0.75, 0.75, 0.75, 12, -0.75, 12, -0.75, -12, 0.75, -12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 4, 5, 6), PackedInt32Array(0, 3, 6), PackedInt32Array(7, 0, 6)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0.75, -12, -0.75, -12, -0.75, 12, 0.75, 12, 0.75, 0.75, 12, 0.75, 12, -0.75, 0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_dj8i2"]
+vertices = PackedVector2Array(0.75, -0.75, 12, -0.75, 12, 0.75, -0.75, 0.75, -0.75, -12, 0.75, -12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0.75, -12, -0.75, -12, -0.75, 0.75, 12, 0.75, 12, -0.75, 0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_p61uj"]
+vertices = PackedVector2Array(-0.75, -0.75, -0.75, -12, 0.75, -12, 0.75, 0.75, -12, 0.75, -12, -0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-0.75, -12, 0.75, -12, 0.75, 0.75, -12, 0.75, -12, -0.75, -0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_paql3"]
+vertices = PackedVector2Array(12, -0.75, 12, 0.75, -12, 0.75, -12, -0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(12, -0.75, 12, 0.75, -12, 0.75, -12, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_wqu7l"]
+vertices = PackedVector2Array(-12, -0.75, 12, -0.75, 12, 0.75, 10.5, 0.75, 12, 12, 10.5, 12, -12, 0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(2, 4, 5, 3), PackedInt32Array(0, 3, 6)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(12, -0.75, 12, 0.75, 12, 12, 10.5, 12, 10.5, 0.75, -12, 0.75, -12, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_3aq0m"]
+vertices = PackedVector2Array(-12, -0.75, 12, -0.75, 12, 0.75, -10.5, 0.75, -12, 0.75, -10.5, 12, -12, 12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3, 5), PackedInt32Array(4, 5, 6)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-12, -0.75, -12, 0.75, -12, 12, -10.5, 12, -10.5, 0.75, 12, 0.75, 12, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_xu7rp"]
+vertices = PackedVector2Array(12, 0.75, -12, 0.75, -12, -0.75, 12, -0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(12, -0.75, 12, 0.75, -12, 0.75, -12, -0.75)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_mw8gt"]
+vertices = PackedVector2Array(-0.75, -0.75, -0.75, -12, 0.75, -12, 0.75, 12, -0.75, 12, -0.75, 0.75, -12, 0.75, -12, -0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 4, 5), PackedInt32Array(0, 3, 5), PackedInt32Array(0, 5, 6, 7)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-0.75, -12, 0.75, -12, 0.75, 12, -0.75, 12, -0.75, 0.75, -12, 0.75, -12, -0.75, -0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_k6p0g"]
+vertices = PackedVector2Array(0.75, -0.75, 12, -0.75, 12, 0.75, -12, 0.75, -12, -0.75, -0.75, -0.75, -0.75, -12, 0.75, -12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 4, 5), PackedInt32Array(0, 3, 5), PackedInt32Array(0, 5, 6, 7)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(12, -0.75, 12, 0.75, -12, 0.75, -12, -0.75, -0.75, -0.75, -0.75, -12, 0.75, -12, 0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_yl0s7"]
+vertices = PackedVector2Array(-0.75, 0.75, -12, 0.75, -12, -0.75, 12, -0.75, 12, 0.75, 0.75, 0.75, 0.75, 12, -0.75, 12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 4, 5), PackedInt32Array(0, 3, 5), PackedInt32Array(0, 5, 6, 7)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-12, 0.75, -12, -0.75, 12, -0.75, 12, 0.75, 0.75, 0.75, 0.75, 12, -0.75, 12, -0.75, 0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_lisi0"]
+vertices = PackedVector2Array(0.75, -0.75, 12, -0.75, 12, 0.75, -0.75, 0.75, -0.75, -12, 0.75, -12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(12, -0.75, 12, 0.75, -0.75, 0.75, -0.75, -12, 0.75, -12, 0.75, -0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_h0ion"]
+vertices = PackedVector2Array(0.75, 0.75, 0.75, 12, -0.75, 12, -0.75, -0.75, 12, -0.75, 12, 0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0.75, 12, -0.75, 12, -0.75, -0.75, 12, -0.75, 12, 0.75, 0.75, 0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_teb8f"]
+vertices = PackedVector2Array(-0.75, 0.75, -12, 0.75, -12, -0.75, 0.75, -0.75, 0.75, 12, -0.75, 12)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-0.75, 12, 0.75, 12, 0.75, -0.75, -12, -0.75, -12, 0.75, -0.75, 0.75)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_j8cfy"]
+vertices = PackedVector2Array(-0.75, -0.75, -0.75, -12, 0.75, -12, 0.75, 0.75, -12, 0.75, -12, -0.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-0.75, -12, 0.75, -12, 0.75, 0.75, -12, 0.75, -12, -0.75, -0.75, -0.75)])
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fry50"]
+texture = ExtResource("1_xu7rp")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -0.353554, 9, 0, 9, 12, -12, 12)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-9, 0, 12, 0, 12, 12, -9, 12)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 0, 12, 0, 12, 3, -12, 3)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -3, 12, -3, 12, 0, -12, 0)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3, -12, 0, -12, 0, 12, -3, 12)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -12, 3, -12, 3, 12, 0, 12)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 3, -12, 0, 0, 0, 0, 12, -3, 12, -3, 3)
+7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 3, 12, 0, 0, 0, 0, 12, 3, 12, 3, 3)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -3, -3, -3, -3, -12, 0, -12, 0, 0, -12, 0)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, -3, 3, -3, 3, -12, 0, -12, 0, 0, 12, 0)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 0, 0, 0, 0, -12, 3, -12, 3, 3, -12, 3)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 0, 0, 0, 0, 12, 3, 12, 3, -3, -12, -3)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 0, 0, 0, 0, -12, -3, -12, -3, 3, 12, 3)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 0, 0, 0, 0, 12, -3, 12, -3, -3, 12, -3)
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 3, -12, 12, 0, 12, 0, 0, -12, 0)
+7:1/0 = 0
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 3, 12, 12, 0, 12, 0, 0, 12, 0)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -3, -12, -12, 0, -12, 0, 0, -12, 0)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, -3, 12, -12, 0, -12, 0, 0, 12, 0)
+2:2/next_alternative_id = 2
+2:2/0 = 0
+2:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_dcaco")
+2:2/1 = 1
+2:2/1/navigation_layer_0/polygon = SubResource("NavigationPolygon_y7lp7")
+3:2/next_alternative_id = 17
+3:2/0 = 0
+3:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_5rq7b")
+3:2/0/custom_data_0 = true
+3:2/1 = 1
+3:2/1/navigation_layer_0/polygon = SubResource("NavigationPolygon_wcdvl")
+3:2/1/custom_data_0 = true
+3:2/2 = 2
+3:2/2/navigation_layer_0/polygon = SubResource("NavigationPolygon_xu7rp")
+3:2/2/custom_data_0 = true
+3:2/3 = 3
+3:2/3/navigation_layer_0/polygon = SubResource("NavigationPolygon_mw8gt")
+3:2/3/custom_data_0 = true
+3:2/4 = 4
+3:2/4/navigation_layer_0/polygon = SubResource("NavigationPolygon_k6p0g")
+3:2/4/custom_data_0 = true
+3:2/5 = 5
+3:2/5/navigation_layer_0/polygon = SubResource("NavigationPolygon_yl0s7")
+3:2/5/custom_data_0 = true
+3:2/6 = 6
+3:2/6/navigation_layer_0/polygon = SubResource("NavigationPolygon_lisi0")
+3:2/6/custom_data_0 = true
+3:2/7 = 7
+3:2/7/navigation_layer_0/polygon = SubResource("NavigationPolygon_h0ion")
+3:2/7/custom_data_0 = true
+3:2/8 = 8
+3:2/8/navigation_layer_0/polygon = SubResource("NavigationPolygon_teb8f")
+3:2/8/custom_data_0 = true
+3:2/9 = 9
+3:2/9/navigation_layer_0/polygon = SubResource("NavigationPolygon_j8cfy")
+3:2/9/custom_data_0 = true
+3:2/10 = 10
+3:2/10/navigation_layer_0/polygon = SubResource("NavigationPolygon_2gk78")
+3:2/10/custom_data_0 = true
+3:2/12 = 12
+3:2/12/navigation_layer_0/polygon = SubResource("NavigationPolygon_dj8i2")
+3:2/12/custom_data_0 = true
+3:2/13 = 13
+3:2/13/navigation_layer_0/polygon = SubResource("NavigationPolygon_p61uj")
+3:2/13/custom_data_0 = true
+3:2/14 = 14
+3:2/14/navigation_layer_0/polygon = SubResource("NavigationPolygon_paql3")
+3:2/15 = 15
+3:2/15/navigation_layer_0/polygon = SubResource("NavigationPolygon_wqu7l")
+3:2/16 = 16
+3:2/16/navigation_layer_0/polygon = SubResource("NavigationPolygon_3aq0m")
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 12, 12, 12, 12, -12, -12, -12, -12, 0, -3, 0, -3, 3, 0, 3)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 12, -12, 12, -12, -12, 12, -12, 12, 0, 3, 0, 3, 3, 0, 3)
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -12, 12, -12, 12, 12, -12, 12, -12, 0, -3, 0, -3, -3, 0, -3)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 0, 12, 12, -12, 12, -12, -12, 0, -12, 0, -3, 3, -3, 3, 0)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -12, 12, -12, 12, 12, 0, 12)
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -12, -12, -12, -12, 12, 0, 12)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, -12, -12, -12, -12, 0, 12, 0)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 12, -12, 12, -12, 0, 12, 0)
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 12, -12, 12, -12, 0, -3, 0, -3, -3, 0, -3, 0, -12, 12, -12)
+5:3/0 = 0
+5:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, -12, -12, -12, -12, 0, -3, 0, -3, 3, 0, 3, 0, 12, 12, 12)
+6:3/0 = 0
+6:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 12, 12, 12, 12, 0, 3, 0, 3, -3, 0, -3, 0, -12, -12, -12)
+7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, -12, 12, 0, 12, 0, 3, 3, 3, 3, 0, 12, 0, 12, -12)
+0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -12, -12, 12, 0, 12, 0, 3, 3, 3, 3, 0, 12, 0, 12, -12)
+1:4/0 = 0
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, -12, 12, 12, 0, 12, 0, 3, -3, 3, -3, 0, -12, 0, -12, -12)
+2:4/0 = 0
+2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 12, 12, 12, 12, 0, 3, 0, 3, -3, 0, -3, 0, -12, -12, -12)
+3:4/0 = 0
+3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 12, -12, 12, -12, 0, -3, 0, -3, -3, 0, -3, 0, -12, 12, -12)
+4:4/0 = 0
+4:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(12, 12, -12, 12, -12, -3, -3, -3, -3, -3, 0, -3, 0, -6, 6, -6, 6, -12, 12, -12)
+5:4/0 = 0
+5:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, 12, 12, 12, 12, -3, 3, -3, 3, -3, 0, -3, 0, -6, -6, -6, -6, -12, -12, -12)
+6:4/0 = 0
+7:4/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_olh2r"]
+tile_size = Vector2i(24, 24)
+physics_layer_0/collision_layer = 2
+navigation_layer_0/layers = 1
+custom_data_layer_0/name = "isEmpty"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_fry50")
+pattern_0 = SubResource("TileMapPattern_8iang")
+pattern_1 = SubResource("TileMapPattern_rkv41")
+pattern_2 = SubResource("TileMapPattern_c0jkg")
+pattern_3 = SubResource("TileMapPattern_tjq8e")
+pattern_4 = SubResource("TileMapPattern_4a351")
+pattern_5 = SubResource("TileMapPattern_nsm6f")
+
+[node name="TileMap" type="TileMap"]
+position = Vector2(0, 11)
+tile_set = SubResource("TileSet_olh2r")
+format = 2
+layer_0/tile_data = PackedInt32Array(-65550, 131072, 3, 65522, 196608, 3, -65549, 131072, 3, 65523, 196608, 3, -65548, 131072, 3, 65524, 196608, 3, -65547, 131072, 3, 65525, 196608, 3, -65546, 131072, 3, 65526, 196608, 3, -262153, 65536, 3, -196617, 65536, 3, -131081, 65536, 3, -65545, 0, 2, 65527, 393216, 1, 131063, 65536, 3, 196599, 65536, 3, 262135, 65536, 3, 1048567, 458752, 2, 1048568, 196608, 3, 1048569, 196608, 3, 1048570, 196608, 3, 1048571, 196608, 3, 1048572, 196608, 3, 1048573, 196608, 3, 1048574, 196608, 3, 1048575, 196608, 3, 983040, 196608, 3, 983041, 196608, 3, 983042, 196608, 3, 983043, 196608, 3, 983044, 196608, 3, 983045, 196608, 3, 983046, 196608, 3, 983047, 196608, 3, 983048, 393216, 2, 196616, 0, 3, 131080, 0, 3, 65544, 0, 3, 8, 458752, 1, 9, 196608, 3, 10, 196608, 3, 11, 196608, 3, 12, 196608, 3, 13, 196608, 3, -131063, 131072, 3, -131062, 131072, 3, -131061, 131072, 3, -131060, 131072, 3, -131059, 131072, 3, -131064, 65536, 2, -196600, 0, 3, -262136, 0, 3, -327672, 0, 3, -917505, 131072, 3, -983040, 131072, 3, -917513, 327680, 2, -917512, 131072, 3, -917511, 131072, 3, -917510, 131072, 3, -917509, 131072, 3, -917508, 131072, 3, -917507, 131072, 3, -917506, 131072, 3, -983039, 131072, 3, -983038, 131072, 3, -983037, 131072, 3, -983036, 131072, 3, -983035, 131072, 3, -983034, 131072, 3, -983033, 131072, 3, -983032, 262144, 2, -65528, 196608, 131074, -65527, 196608, 131074, -65526, 196608, 131074, -65525, 196608, 131074, -65524, 196608, 131074, -65523, 196608, 131074, -14, 196608, 131074, -13, 196608, 131074, -12, 196608, 131074, -11, 196608, 131074, -10, 196608, 131074, -9, 196608, 131074, 983031, 65536, 3, 983032, 196608, 131074, 983033, 196608, 131074, 983034, 196608, 131074, 983035, 196608, 131074, 983036, 196608, 131074, 983037, 196608, 131074, 983039, 196608, 131074, 917504, 196608, 131074, 917506, 196608, 131074, 917507, 196608, 131074, 917508, 196608, 131074, 917509, 196608, 131074, 917510, 196608, 131074, 917511, 196608, 131074, 917512, 0, 3, -131080, 196608, 65538, -196616, 196608, 65538, -262152, 196608, 65538, -131065, 196608, 65538, -196601, 196608, 65538, -262137, 196608, 65538, -327673, 196608, 65538, 131079, 196608, 65538, 65543, 196608, 65538, 7, 196608, 65538, -65529, 196608, 2, 917505, 196608, 262146, 983038, 196608, 262146, -393208, 0, 3, -458744, 0, 3, -524280, 0, 3, -589816, 0, 3, -655352, 0, 3, -720888, 0, 3, -786424, 0, 3, -851960, 0, 3, -917496, 0, 3, -851977, 65536, 3, -786441, 65536, 3, -720905, 65536, 3, -655369, 65536, 3, -589833, 65536, 3, -524297, 65536, 3, -458761, 65536, 3, -393225, 65536, 3, -327689, 65536, 3, 327671, 65536, 3, 393207, 65536, 3, 458743, 65536, 3, 524279, 65536, 3, 589815, 65536, 3, 655351, 65536, 3, 720887, 65536, 3, 786423, 65536, 3, 851959, 65536, 3, 917495, 65536, 3, 262152, 0, 3, 327688, 0, 3, 393224, 0, 3, 458760, 0, 3, 524296, 0, 3, 589832, 0, 3, 655368, 0, 3, 720904, 0, 3, 786440, 0, 3, 851976, 0, 3)
+script = ExtResource("2_xb1xf")
+
+[node name="Connector" parent="." instance=ExtResource("3_xb1xf")]
+position = Vector2(-11, -10)
+script = ExtResource("4_fry50")
+
+[node name="Player" parent="." instance=ExtResource("5_gkyki")]
+position = Vector2(-1, 216)
+scale = Vector2(3.42, 3.42)
+collision_mask = 14
+
+[node name="Pellets" type="Node" parent="." node_paths=PackedStringArray("ghost_array")]
+script = ExtResource("6_w8ivb")
+ghost_array = [null, null, null, null]
+
+[node name="Pellet" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -1)
+collision_layer = 4
+
+[node name="Pellet73" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-156, -1)
+collision_layer = 4
+
+[node name="Pellet2" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 23)
+collision_layer = 4
+
+[node name="Pellet3" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 47)
+collision_layer = 4
+
+[node name="Pellet4" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 71)
+collision_layer = 4
+
+[node name="Pellet5" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 95)
+collision_layer = 4
+
+[node name="Pellet6" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 119)
+collision_layer = 4
+
+[node name="Pellet7" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 143)
+collision_layer = 4
+
+[node name="Pellet8" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 168)
+collision_layer = 4
+
+[node name="Pellet9" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 192)
+collision_layer = 4
+
+[node name="Pellet10" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 216)
+collision_layer = 4
+
+[node name="Pellet242" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 168)
+collision_layer = 4
+
+[node name="Pellet243" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 192)
+collision_layer = 4
+
+[node name="Pellet244" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 216)
+collision_layer = 4
+
+[node name="Pellet245" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, 165)
+collision_layer = 4
+
+[node name="Pellet246" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, 189)
+collision_layer = 4
+
+[node name="Pellet11" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 240)
+collision_layer = 4
+
+[node name="Pellet270" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-277, 215)
+collision_layer = 4
+
+[node name="Pellet12" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 264)
+collision_layer = 4
+
+[node name="Pellet266" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, 216)
+collision_layer = 4
+
+[node name="Pellet267" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, 216)
+collision_layer = 4
+
+[node name="Pellet268" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, 240)
+collision_layer = 4
+
+[node name="Pellet269" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, 264)
+collision_layer = 4
+
+[node name="Pellet13" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, 288)
+collision_layer = 4
+
+[node name="Pellet271" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, 310)
+collision_layer = 4
+
+[node name="Pellet272" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, 334)
+collision_layer = 4
+
+[node name="Pellet221" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, 313)
+collision_layer = 4
+
+[node name="Pellet222" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, 337)
+collision_layer = 4
+
+[node name="Pellet223" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, 311)
+collision_layer = 4
+
+[node name="Pellet224" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, 335)
+collision_layer = 4
+
+[node name="Pellet215" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, 237)
+collision_layer = 4
+
+[node name="Pellet216" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, 261)
+collision_layer = 4
+
+[node name="Pellet217" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, 285)
+collision_layer = 4
+
+[node name="Pellet228" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(109, 239)
+collision_layer = 4
+
+[node name="Pellet229" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(109, 263)
+collision_layer = 4
+
+[node name="Pellet230" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(109, 287)
+collision_layer = 4
+
+[node name="Pellet14" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -313)
+collision_layer = 4
+
+[node name="Pellet15" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -289)
+collision_layer = 4
+
+[node name="Pellet16" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -265)
+collision_layer = 4
+
+[node name="Pellet17" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -241)
+collision_layer = 4
+
+[node name="Pellet62" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, -311)
+collision_layer = 4
+
+[node name="Pellet66" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, -287)
+collision_layer = 4
+
+[node name="Pellet69" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, -263)
+collision_layer = 4
+
+[node name="Pellet70" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, -239)
+collision_layer = 4
+
+[node name="Pellet18" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -217)
+collision_layer = 4
+
+[node name="Pellet71" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -312)
+collision_layer = 4
+
+[node name="Pellet72" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -288)
+collision_layer = 4
+
+[node name="Pellet117" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -240)
+collision_layer = 4
+
+[node name="Pellet118" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -216)
+collision_layer = 4
+
+[node name="Pellet19" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -193)
+collision_layer = 4
+
+[node name="Pellet20" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -169)
+collision_layer = 4
+
+[node name="Pellet21" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -144)
+collision_layer = 4
+
+[node name="Pellet120" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -195)
+collision_layer = 4
+
+[node name="Pellet121" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -171)
+collision_layer = 4
+
+[node name="Pellet122" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, -146)
+collision_layer = 4
+
+[node name="Pellet22" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -120)
+collision_layer = 4
+
+[node name="Pellet23" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -96)
+collision_layer = 4
+
+[node name="Pellet24" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -72)
+collision_layer = 4
+
+[node name="Pellet25" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -48)
+collision_layer = 4
+
+[node name="Pellet26" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-180, -24)
+collision_layer = 4
+
+[node name="Pellet27" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -1)
+collision_layer = 4
+
+[node name="Pellet28" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 23)
+collision_layer = 4
+
+[node name="Pellet29" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 47)
+collision_layer = 4
+
+[node name="Pellet30" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 71)
+collision_layer = 4
+
+[node name="Pellet31" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 95)
+collision_layer = 4
+
+[node name="Pellet32" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 119)
+collision_layer = 4
+
+[node name="Pellet33" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 143)
+collision_layer = 4
+
+[node name="Pellet34" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 168)
+collision_layer = 4
+
+[node name="Pellet35" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 192)
+collision_layer = 4
+
+[node name="Pellet36" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 216)
+collision_layer = 4
+
+[node name="Pellet197" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, 164)
+collision_layer = 4
+
+[node name="Pellet198" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, 188)
+collision_layer = 4
+
+[node name="Pellet37" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 240)
+collision_layer = 4
+
+[node name="Pellet38" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 264)
+collision_layer = 4
+
+[node name="Pellet189" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(252, 216)
+collision_layer = 4
+
+[node name="Pellet190" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(252, 240)
+collision_layer = 4
+
+[node name="Pellet191" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(252, 264)
+collision_layer = 4
+
+[node name="Pellet182" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, 288)
+collision_layer = 4
+
+[node name="Pellet183" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, 312)
+collision_layer = 4
+
+[node name="Pellet184" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, 336)
+collision_layer = 4
+
+[node name="Pellet39" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 288)
+collision_layer = 4
+
+[node name="Pellet40" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -313)
+collision_layer = 4
+
+[node name="Pellet41" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -289)
+collision_layer = 4
+
+[node name="Pellet42" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -265)
+collision_layer = 4
+
+[node name="Pellet43" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -241)
+collision_layer = 4
+
+[node name="Pellet59" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, -291)
+collision_layer = 4
+
+[node name="Pellet60" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, -267)
+collision_layer = 4
+
+[node name="Pellet61" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, -243)
+collision_layer = 4
+
+[node name="Pellet55" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -313)
+collision_layer = 4
+
+[node name="Pellet56" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -289)
+collision_layer = 4
+
+[node name="Pellet58" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -241)
+collision_layer = 4
+
+[node name="Pellet63" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -193)
+collision_layer = 4
+
+[node name="Pellet64" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -169)
+collision_layer = 4
+
+[node name="Pellet65" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -145)
+collision_layer = 4
+
+[node name="Pellet67" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -193)
+collision_layer = 4
+
+[node name="Pellet68" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -169)
+collision_layer = 4
+
+[node name="Pellet44" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -217)
+collision_layer = 4
+
+[node name="Pellet45" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -193)
+collision_layer = 4
+
+[node name="Pellet46" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -169)
+collision_layer = 4
+
+[node name="Pellet47" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -144)
+collision_layer = 4
+
+[node name="Pellet123" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(107, -197)
+collision_layer = 4
+
+[node name="Pellet136" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(107, -173)
+collision_layer = 4
+
+[node name="Pellet144" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, -196)
+collision_layer = 4
+
+[node name="Pellet145" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, -172)
+collision_layer = 4
+
+[node name="Pellet137" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(107, -148)
+collision_layer = 4
+
+[node name="Pellet48" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -120)
+collision_layer = 4
+
+[node name="Pellet49" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -96)
+collision_layer = 4
+
+[node name="Pellet50" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -72)
+collision_layer = 4
+
+[node name="Pellet51" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -48)
+collision_layer = 4
+
+[node name="Pellet52" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, -24)
+collision_layer = 4
+
+[node name="Pellet75" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-275, -1)
+collision_layer = 4
+
+[node name="Pellet76" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-251, -1)
+collision_layer = 4
+
+[node name="Pellet77" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-227, -1)
+collision_layer = 4
+
+[node name="Pellet80" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-322, -1)
+collision_layer = 4
+
+[node name="Pellet81" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-298, -1)
+collision_layer = 4
+
+[node name="Pellet146" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, 143)
+collision_layer = 4
+
+[node name="Pellet147" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-228, 143)
+collision_layer = 4
+
+[node name="Pellet148" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-204, 143)
+collision_layer = 4
+
+[node name="Pellet149" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-299, 143)
+collision_layer = 4
+
+[node name="Pellet150" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-275, 143)
+collision_layer = 4
+
+[node name="Pellet151" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-107, 143)
+collision_layer = 4
+
+[node name="Pellet152" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-83, 143)
+collision_layer = 4
+
+[node name="Pellet153" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-59, 143)
+collision_layer = 4
+
+[node name="Pellet154" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-154, 143)
+collision_layer = 4
+
+[node name="Pellet155" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-130, 143)
+collision_layer = 4
+
+[node name="Pellet156" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-182, 359)
+collision_layer = 4
+
+[node name="Pellet157" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-254, 359)
+collision_layer = 4
+
+[node name="Pellet158" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-230, 359)
+collision_layer = 4
+
+[node name="Pellet159" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-206, 359)
+collision_layer = 4
+
+[node name="Pellet160" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-301, 359)
+collision_layer = 4
+
+[node name="Pellet161" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-277, 359)
+collision_layer = 4
+
+[node name="Pellet251" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-254, 359)
+collision_layer = 4
+
+[node name="Pellet252" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-230, 359)
+collision_layer = 4
+
+[node name="Pellet253" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-206, 359)
+collision_layer = 4
+
+[node name="Pellet254" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-301, 359)
+collision_layer = 4
+
+[node name="Pellet255" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-277, 359)
+collision_layer = 4
+
+[node name="Pellet256" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-253, 287)
+collision_layer = 4
+
+[node name="Pellet257" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-229, 287)
+collision_layer = 4
+
+[node name="Pellet258" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-205, 287)
+collision_layer = 4
+
+[node name="Pellet259" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, 287)
+collision_layer = 4
+
+[node name="Pellet260" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-276, 287)
+collision_layer = 4
+
+[node name="Pellet261" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-253, 287)
+collision_layer = 4
+
+[node name="Pellet262" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-229, 287)
+collision_layer = 4
+
+[node name="Pellet263" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-205, 287)
+collision_layer = 4
+
+[node name="Pellet264" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-300, 287)
+collision_layer = 4
+
+[node name="Pellet265" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-276, 287)
+collision_layer = 4
+
+[node name="Pellet162" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-109, 359)
+collision_layer = 4
+
+[node name="Pellet163" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-85, 359)
+collision_layer = 4
+
+[node name="Pellet164" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-61, 359)
+collision_layer = 4
+
+[node name="Pellet165" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-156, 359)
+collision_layer = 4
+
+[node name="Pellet166" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-132, 359)
+collision_layer = 4
+
+[node name="Pellet167" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(83, 360)
+collision_layer = 4
+
+[node name="Pellet168" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(11, 360)
+collision_layer = 4
+
+[node name="Pellet169" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(35, 360)
+collision_layer = 4
+
+[node name="Pellet170" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(59, 360)
+collision_layer = 4
+
+[node name="Pellet171" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, 360)
+collision_layer = 4
+
+[node name="Pellet172" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-12, 360)
+collision_layer = 4
+
+[node name="Pellet173" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(156, 360)
+collision_layer = 4
+
+[node name="Pellet174" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(180, 360)
+collision_layer = 4
+
+[node name="Pellet175" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(204, 360)
+collision_layer = 4
+
+[node name="Pellet176" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(109, 360)
+collision_layer = 4
+
+[node name="Pellet201" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-156, 215)
+collision_layer = 4
+
+[node name="Pellet202" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-132, 215)
+collision_layer = 4
+
+[node name="Pellet203" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, 215)
+collision_layer = 4
+
+[node name="Pellet204" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, 216)
+collision_layer = 4
+
+[node name="Pellet205" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, 216)
+collision_layer = 4
+
+[node name="Pellet208" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-83, 216)
+collision_layer = 4
+
+[node name="Pellet209" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-59, 216)
+collision_layer = 4
+
+[node name="Pellet218" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-38, 287)
+collision_layer = 4
+
+[node name="Pellet231" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, 169)
+collision_layer = 4
+
+[node name="Pellet232" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, 193)
+collision_layer = 4
+
+[node name="Pellet233" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-37, 143)
+collision_layer = 4
+
+[node name="Pellet237" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(84, 143)
+collision_layer = 4
+
+[node name="Pellet238" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(108, 143)
+collision_layer = 4
+
+[node name="Pellet239" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(132, 143)
+collision_layer = 4
+
+[node name="Pellet240" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(61, 143)
+collision_layer = 4
+
+[node name="Pellet241" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(154, 143)
+collision_layer = 4
+
+[node name="Pellet234" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(37, 170)
+collision_layer = 4
+
+[node name="Pellet235" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(37, 194)
+collision_layer = 4
+
+[node name="Pellet236" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, 144)
+collision_layer = 4
+
+[node name="Pellet219" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-85, 287)
+collision_layer = 4
+
+[node name="Pellet220" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-61, 287)
+collision_layer = 4
+
+[node name="Pellet225" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(85, 287)
+collision_layer = 4
+
+[node name="Pellet226" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(38, 287)
+collision_layer = 4
+
+[node name="Pellet227" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(62, 287)
+collision_layer = 4
+
+[node name="Pellet210" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(62, 216)
+collision_layer = 4
+
+[node name="Pellet211" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(85, 215)
+collision_layer = 4
+
+[node name="Pellet212" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(111, 215)
+collision_layer = 4
+
+[node name="Pellet213" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(133, 215)
+collision_layer = 4
+
+[node name="Pellet214" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(159, 215)
+collision_layer = 4
+
+[node name="Pellet177" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(133, 360)
+collision_layer = 4
+
+[node name="Pellet178" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(251, 360)
+collision_layer = 4
+
+[node name="Pellet179" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(275, 360)
+collision_layer = 4
+
+[node name="Pellet180" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(299, 360)
+collision_layer = 4
+
+[node name="Pellet181" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(228, 360)
+collision_layer = 4
+
+[node name="Pellet185" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(206, 287)
+collision_layer = 4
+
+[node name="Pellet186" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(253, 287)
+collision_layer = 4
+
+[node name="Pellet187" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(277, 287)
+collision_layer = 4
+
+[node name="Pellet188" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(230, 287)
+collision_layer = 4
+
+[node name="Pellet192" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(299, 143)
+collision_layer = 4
+
+[node name="Pellet193" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(205, 142)
+collision_layer = 4
+
+[node name="Pellet194" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(252, 142)
+collision_layer = 4
+
+[node name="Pellet195" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(276, 142)
+collision_layer = 4
+
+[node name="Pellet200" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(278, 215)
+collision_layer = 4
+
+[node name="Pellet196" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(229, 142)
+collision_layer = 4
+
+[node name="Pellet78" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-202, -1)
+collision_layer = 4
+
+[node name="Pellet273" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(299, -1)
+collision_layer = 4
+
+[node name="Pellet274" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(323, -1)
+collision_layer = 4
+
+[node name="Pellet275" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(204, -1)
+collision_layer = 4
+
+[node name="Pellet276" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(228, -1)
+collision_layer = 4
+
+[node name="Pellet277" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(252, -1)
+collision_layer = 4
+
+[node name="Pellet278" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(157, -1)
+collision_layer = 4
+
+[node name="Pellet280" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(277, -1)
+collision_layer = 4
+
+[node name="Pellet53" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-14, -217)
+collision_layer = 4
+
+[node name="Pellet74" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(10, -217)
+collision_layer = 4
+
+[node name="Pellet79" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-109, -217)
+collision_layer = 4
+
+[node name="Pellet82" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-85, -217)
+collision_layer = 4
+
+[node name="Pellet83" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-61, -217)
+collision_layer = 4
+
+[node name="Pellet84" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-156, -217)
+collision_layer = 4
+
+[node name="Pellet85" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-132, -217)
+collision_layer = 4
+
+[node name="Pellet119" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-109, -217)
+collision_layer = 4
+
+[node name="Pellet124" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-230, -217)
+collision_layer = 4
+
+[node name="Pellet125" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-206, -217)
+collision_layer = 4
+
+[node name="Pellet126" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-277, -217)
+collision_layer = 4
+
+[node name="Pellet127" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-253, -217)
+collision_layer = 4
+
+[node name="Pellet132" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-229, -146)
+collision_layer = 4
+
+[node name="Pellet133" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-205, -146)
+collision_layer = 4
+
+[node name="Pellet134" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-276, -146)
+collision_layer = 4
+
+[node name="Pellet135" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, -146)
+collision_layer = 4
+
+[node name="Pellet128" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-229, -313)
+collision_layer = 4
+
+[node name="Pellet129" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-205, -313)
+collision_layer = 4
+
+[node name="Pellet130" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-276, -313)
+collision_layer = 4
+
+[node name="Pellet131" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-252, -313)
+collision_layer = 4
+
+[node name="Pellet111" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, -313)
+collision_layer = 4
+
+[node name="Pellet112" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-84, -313)
+collision_layer = 4
+
+[node name="Pellet113" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-60, -313)
+collision_layer = 4
+
+[node name="Pellet114" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-155, -313)
+collision_layer = 4
+
+[node name="Pellet115" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-131, -313)
+collision_layer = 4
+
+[node name="Pellet86" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-36, -217)
+collision_layer = 4
+
+[node name="Pellet87" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(204, -217)
+collision_layer = 4
+
+[node name="Pellet88" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(83, -217)
+collision_layer = 4
+
+[node name="Pellet89" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(107, -217)
+collision_layer = 4
+
+[node name="Pellet90" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(131, -217)
+collision_layer = 4
+
+[node name="Pellet91" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, -217)
+collision_layer = 4
+
+[node name="Pellet92" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(60, -217)
+collision_layer = 4
+
+[node name="Pellet93" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(156, -217)
+collision_layer = 4
+
+[node name="Pellet105" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(83, -313)
+collision_layer = 4
+
+[node name="Pellet106" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(107, -313)
+collision_layer = 4
+
+[node name="Pellet107" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(131, -313)
+collision_layer = 4
+
+[node name="Pellet108" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, -313)
+collision_layer = 4
+
+[node name="Pellet109" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(60, -313)
+collision_layer = 4
+
+[node name="Pellet110" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(156, -313)
+collision_layer = 4
+
+[node name="Pellet54" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(300, -217)
+collision_layer = 4
+
+[node name="Pellet95" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(228, -217)
+collision_layer = 4
+
+[node name="Pellet96" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(253, -217)
+collision_layer = 4
+
+[node name="Pellet97" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(278, -217)
+collision_layer = 4
+
+[node name="Pellet101" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(204, -145)
+collision_layer = 4
+
+[node name="Pellet102" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(228, -145)
+collision_layer = 4
+
+[node name="Pellet103" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(253, -145)
+collision_layer = 4
+
+[node name="Pellet138" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(36, -145)
+collision_layer = 4
+
+[node name="Pellet139" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(60, -145)
+collision_layer = 4
+
+[node name="Pellet140" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(85, -145)
+collision_layer = 4
+
+[node name="Pellet141" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-108, -146)
+collision_layer = 4
+
+[node name="Pellet142" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-84, -146)
+collision_layer = 4
+
+[node name="Pellet143" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(-59, -146)
+collision_layer = 4
+
+[node name="Pellet104" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(278, -145)
+collision_layer = 4
+
+[node name="Pellet94" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(205, -313)
+collision_layer = 4
+
+[node name="Pellet98" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(229, -313)
+collision_layer = 4
+
+[node name="Pellet99" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(254, -313)
+collision_layer = 4
+
+[node name="Pellet100" parent="Pellets" instance=ExtResource("7_imqcb")]
+position = Vector2(279, -313)
+collision_layer = 4
+
+[node name="Area2D" parent="Pellets" instance=ExtResource("8_q7884")]
+position = Vector2(-301, -264)
+collision_layer = 8
+
+[node name="Area2D2" parent="Pellets" instance=ExtResource("8_q7884")]
+position = Vector2(300, -266)
+collision_layer = 8
+
+[node name="Area2D3" parent="Pellets" instance=ExtResource("8_q7884")]
+position = Vector2(300, 215)
+collision_layer = 8
+
+[node name="Area2D4" parent="Pellets" instance=ExtResource("8_q7884")]
+position = Vector2(-300, 215)
+collision_layer = 8
+
+[node name="Area2D5" parent="Pellets" instance=ExtResource("8_q7884")]
+position = Vector2(-1, 215)
+collision_layer = 8
+
+[node name="UI" parent="." instance=ExtResource("9_imqcb")]
+
+[node name="PointsManager" type="Node" parent="."]
+script = ExtResource("10_q7884")
+
+[connection signal="body_entered" from="Pellets/Area2D" to="Pellets/Area2D" method="_on_body_entered"]
+[connection signal="body_entered" from="Pellets/Area2D2" to="Pellets/Area2D2" method="_on_body_entered"]
+[connection signal="body_entered" from="Pellets/Area2D3" to="Pellets/Area2D3" method="_on_body_entered"]
+[connection signal="body_entered" from="Pellets/Area2D4" to="Pellets/Area2D4" method="_on_body_entered"]
+[connection signal="body_entered" from="Pellets/Area2D5" to="Pellets/Area2D5" method="_on_body_entered"]

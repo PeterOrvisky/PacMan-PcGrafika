@@ -1,0 +1,147 @@
+extends Area2D
+
+class_name Ghost
+
+# ENUM pre stavy ducha
+enum GhostState {
+	SCATTER,
+	CHASE,
+	RUN_AWAY,
+	EATEN,
+	STARTING_AT_HOME
+}
+
+@export var color: Color = Color.WHITE  # Predvolená farba pre ducha
+@export var scatter_wait_time = 8
+@export var eaten_speed = 240
+@export var speed = 120
+@export var movement_targets: Resource
+@export var tile_map: MazeTileMap
+@export var chasing_target: Node2D
+@export var is_starting_at_home = false
+@export var starting_position: Node2D
+
+@onready var eyes_sprite = $EyesSprite
+@onready var body_sprite = $BodySprite
+@onready var navigation_agent_2d = $NavigationAgent2D
+@onready var scatter_timer = $ScatterTimer
+@onready var run_away_timer = $RunAwayTimer
+
+var current_state: GhostState = GhostState.SCATTER
+var current_scatter_index = 0
+var current_at_home_index = 0
+var is_blinking = false
+
+# Inicializácia (pri načítaní scény)
+func _ready():
+	call_deferred("setup")
+
+# Spracovanie správania ducha každý snímok
+func _process(delta):
+	if current_state != GhostState.EATEN:
+		move_ghost(navigation_agent_2d.get_next_path_position(), delta)
+
+### Nastavenie ducha
+func setup():
+	if movement_targets == null:
+		push_error("Setup failed! movement_targets not assigned.")
+		return
+
+	# Inicializácia navigácie
+	if tile_map:
+		navigation_agent_2d.set_navigation_map(tile_map.get_navigation_map(0))
+	else:
+		push_error("TileMap not assigned to Ghost!")
+
+	position = starting_position.position
+	current_state = GhostState.SCATTER
+
+	# Povolenie kolízií
+	set_collision_layer_value(1, true)
+	set_collision_mask_value(1, true)
+
+	eyes_sprite.show_eyes()
+	body_sprite.move()
+
+	if is_starting_at_home:
+		start_at_home()
+	else:
+		scatter()
+
+### SCATTER stav
+func scatter():
+	if movement_targets == null or movement_targets.scatter_targets.size() == 0:
+		push_error("No scatter_targets assigned to Ghost.")
+		return
+
+	current_state = GhostState.SCATTER
+	update_scatter_target()
+	scatter_timer.start()
+
+### RUN_AWAY stav po zjedení veľkého pelletu
+func on_big_pellet_eaten(duration: float):
+	if current_state == GhostState.RUN_AWAY:
+		extend_runaway_time(duration)  # Predĺžiť RUN_AWAY čas
+	elif current_state != GhostState.EATEN:
+		run_away_from_pacman()
+
+func extend_runaway_time(duration: float):
+	run_away_timer.start(run_away_timer.time_left + duration)
+	print("Runaway time extended. New time: %fs" % run_away_timer.time_left)
+
+func run_away_from_pacman():
+	run_away_timer.start()
+	current_state = GhostState.RUN_AWAY
+	body_sprite.start_blinking()
+	print("Ghost set to RUN_AWAY state.")
+	update_scatter_target()
+
+### Návrat TELA ducha na domácu pozíciu (respawn)
+func respawn_body_at_home():
+	print("Ghost respawn @ home. Transitioning back to CHASE state.")
+	current_state = GhostState.CHASE
+	body_sprite.show()
+	body_sprite.move()
+	eyes_sprite.show_eyes()
+	set_collision_mask_value(1, false)
+
+	await get_tree().create_timer(1.5).timeout  # Ochranná doba
+	set_collision_mask_value(1, true)
+	start_chasing_pacman()
+
+### Pohyb do štartovacej oblasti
+func start_at_home():
+	if movement_targets == null or movement_targets.at_home_targets.size() == 0:
+		push_error("Ghost error: at_home_targets not assigned or empty.")
+		return
+	
+	current_state = GhostState.STARTING_AT_HOME
+	current_at_home_index = 0  # Začíname na prvom "domácom" bode
+
+	# Nastavenie cieľa pre navigáciu v agentovi
+	navigation_agent_2d.target_position = movement_targets.at_home_targets[current_at_home_index].position
+	print("Ghost moving within home area.")
+
+### Prenasledovanie pacmana (CHASE stav)
+func start_chasing_pacman():
+	if chasing_target == null:
+		push_error("Chasing target not assigned to Ghost!")
+		return
+	current_state = GhostState.CHASE
+	navigation_agent_2d.target_position = chasing_target.position
+	print("Ghost is now chasing the player.")
+
+### Pohyb ducha smerom k cieľu
+func move_ghost(next_position: Vector2, delta: float):
+	var current_speed = eaten_speed if current_state == GhostState.EATEN else speed
+	var new_velocity = (next_position - global_position).normalized() * current_speed * delta
+	position += new_velocity
+
+### Aktualizácia scatter targeta
+func update_scatter_target():
+	if movement_targets == null or movement_targets.scatter_targets.size() == 0:
+		push_error("Scatter targets incorrectly configured!")
+		return
+
+	navigation_agent_2d.target_position = movement_targets.scatter_targets[current_scatter_index].position
+	current_scatter_index = (current_scatter_index + 1) % movement_targets.scatter_targets.size()
