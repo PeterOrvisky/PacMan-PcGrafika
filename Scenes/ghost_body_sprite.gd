@@ -27,3 +27,7 @@ func run_away():
 
 func start_blinking():
 	animation_player.play("blinking")
+
+func stop_blinking():
+	# Stop blinking and return to normal appearance
+	move()

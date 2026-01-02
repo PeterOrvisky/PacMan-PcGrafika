@@ -58,6 +58,9 @@ func _physics_process(delta):
 
 	velocity = movement_direction * speed
 	move_and_slide()
+	
+	# Update animation based on movement
+	update_animation()
 
 func get_input():
 	if Input.is_action_pressed("left"):
@@ -77,6 +80,12 @@ func can_move_in_direction(dir: Vector2, delta: float) -> bool:
 	shape_query.transform = global_transform.translated(dir * speed * delta * 2)
 	var result = get_world_2d().direct_space_state.intersect_shape(shape_query)
 	return result.size() == 0
+
+func update_animation():
+	# Play default (moving) animation when PacMan is moving
+	if movement_direction != Vector2.ZERO and animation_player.current_animation != "death":
+		if animation_player.current_animation != "default":
+			animation_player.play("default")
 
 func die():
 	if is_dying or is_invulnerable:

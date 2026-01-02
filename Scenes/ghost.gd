@@ -2,6 +2,9 @@ extends Area2D
 
 class_name Ghost
 
+# Signal emitted when run away timer times out
+signal run_away_timeout
+
 # ENUM pre stavy ducha
 enum GhostState {
 	SCATTER,
@@ -145,3 +148,44 @@ func update_scatter_target():
 
 	navigation_agent_2d.target_position = movement_targets.scatter_targets[current_scatter_index].position
 	current_scatter_index = (current_scatter_index + 1) % movement_targets.scatter_targets.size()
+
+### Signal handler: Scatter timer timeout
+func _on_scatter_timer_timeout():
+	if current_state == GhostState.SCATTER:
+		start_chasing_pacman()
+		print("Ghost switching from SCATTER to CHASE state.")
+
+### Signal handler: Run away timer timeout
+func _on_run_away_timer_timeout():
+	if current_state == GhostState.RUN_AWAY:
+		body_sprite.stop_blinking()
+		body_sprite.move()
+		current_state = GhostState.CHASE
+		run_away_timeout.emit()  # Emit signal for pellets_manager
+		print("Ghost run away time expired. Switching to CHASE state.")
+		start_chasing_pacman()
+
+### Signal handler: Update chasing target position
+func _on_update_chasing_target_position_timer_timeout():
+	if current_state == GhostState.CHASE and chasing_target != null:
+		navigation_agent_2d.target_position = chasing_target.position
+
+### Signal handler: Body entered collision
+func _on_body_entered(body):
+	if body is Player:
+		if current_state == GhostState.RUN_AWAY:
+			# Ghost is eaten by player
+			print("Ghost eaten by player!")
+			current_state = GhostState.EATEN
+			body_sprite.hide()
+			eyes_sprite.show_eyes()
+			set_collision_mask_value(1, false)
+			run_away_timer.stop()
+			# Navigate back home
+			navigation_agent_2d.target_position = starting_position.position
+			await get_tree().create_timer(0.5).timeout
+			respawn_body_at_home()
+		elif current_state != GhostState.EATEN:
+			# Player is caught by ghost
+			print("Player caught by ghost!")
+			body.die()
