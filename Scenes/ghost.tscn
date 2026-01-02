@@ -136,3 +136,4 @@ one_shot = true
 [connection signal="timeout" from="ScatterTimer" to="." method="_on_scatter_timer_timeout"]
 [connection signal="timeout" from="UpdateChasingTargetPositionTimer" to="." method="_on_update_chasing_target_position_timer_timeout"]
 [connection signal="timeout" from="RunAwayTimer" to="." method="_on_run_away_timer_timeout"]
+[connection signal="timeout" from="AtHomeTimer" to="." method="_on_at_home_timer_timeout"]

@@ -2,6 +2,14 @@ extends Area2D
 
 class_name Ghost
 
+# Signal emitted when run away timer times out
+signal run_away_timeout
+
+# Collision layer constants (from project settings)
+const LAYER_PLAYER = 1
+const LAYER_WALL = 2
+const LAYER_GHOST = 5
+
 # ENUM pre stavy ducha
 enum GhostState {
 	SCATTER,
@@ -26,6 +34,8 @@ enum GhostState {
 @onready var navigation_agent_2d = $NavigationAgent2D
 @onready var scatter_timer = $ScatterTimer
 @onready var run_away_timer = $RunAwayTimer
+@onready var update_chasing_target_position_timer = $UpdateChasingTargetPositionTimer
+@onready var at_home_timer = $AtHomeTimer
 
 var current_state: GhostState = GhostState.SCATTER
 var current_scatter_index = 0
@@ -43,9 +53,31 @@ func _process(delta):
 
 ### Nastavenie ducha
 func setup():
+	# If movement_targets resource not assigned, try to find markers from scene
 	if movement_targets == null:
-		push_error("Setup failed! movement_targets not assigned.")
-		return
+		print("Movement targets resource not assigned, attempting to find from scene nodes...")
+		# Try to find movement target nodes based on ghost name
+		var ghost_name = name  # e.g., "RedGhost", "YellowGhost"
+		var targets_path = "../../MovementTargets/" + ghost_name
+		var targets_node = get_node_or_null(targets_path)
+		if targets_node:
+			# Create a runtime movement targets object
+			movement_targets = MovementTargets.new()
+			
+			# Get scatter targets
+			var scatter_node = targets_node.get_node_or_null("Scatter")
+			if scatter_node:
+				movement_targets.scatter_targets = scatter_node.get_children()
+			
+			# Get at home targets
+			var home_node = targets_node.get_node_or_null("Home")
+			if home_node:
+				movement_targets.at_home_targets = home_node.get_children()
+			
+			print("Movement targets loaded from scene for " + ghost_name)
+		else:
+			push_error("Setup failed! Could not find movement targets for " + ghost_name)
+			return
 
 	# Inicializácia navigácie
 	if tile_map:
@@ -56,9 +88,9 @@ func setup():
 	position = starting_position.position
 	current_state = GhostState.SCATTER
 
-	# Povolenie kolízií
-	set_collision_layer_value(1, true)
-	set_collision_mask_value(1, true)
+	# Povolenie kolízií (enable collision with player)
+	set_collision_layer_value(LAYER_PLAYER, true)
+	set_collision_mask_value(LAYER_PLAYER, true)
 
 	eyes_sprite.show_eyes()
 	body_sprite.move()
@@ -75,6 +107,7 @@ func scatter():
 		return
 
 	current_state = GhostState.SCATTER
+	update_chasing_target_position_timer.stop()  # Stop chase timer during scatter
 	update_scatter_target()
 	scatter_timer.start()
 
@@ -93,6 +126,7 @@ func run_away_from_pacman():
 	run_away_timer.start()
 	current_state = GhostState.RUN_AWAY
 	body_sprite.start_blinking()
+	update_chasing_target_position_timer.stop()  # Stop chase timer when running away
 	print("Ghost set to RUN_AWAY state.")
 	update_scatter_target()
 
@@ -103,10 +137,10 @@ func respawn_body_at_home():
 	body_sprite.show()
 	body_sprite.move()
 	eyes_sprite.show_eyes()
-	set_collision_mask_value(1, false)
+	set_collision_mask_value(LAYER_PLAYER, false)  # Temporarily disable collision during respawn
 
-	await get_tree().create_timer(1.5).timeout  # Ochranná doba
-	set_collision_mask_value(1, true)
+	await get_tree().create_timer(1.5).timeout  # Ochranná doba (protection period)
+	set_collision_mask_value(LAYER_PLAYER, true)  # Re-enable collision with player
 	start_chasing_pacman()
 
 ### Pohyb do štartovacej oblasti
@@ -120,6 +154,7 @@ func start_at_home():
 
 	# Nastavenie cieľa pre navigáciu v agentovi
 	navigation_agent_2d.target_position = movement_targets.at_home_targets[current_at_home_index].position
+	at_home_timer.start()  # Start timer to eventually leave home
 	print("Ghost moving within home area.")
 
 ### Prenasledovanie pacmana (CHASE stav)
@@ -129,6 +164,7 @@ func start_chasing_pacman():
 		return
 	current_state = GhostState.CHASE
 	navigation_agent_2d.target_position = chasing_target.position
+	update_chasing_target_position_timer.start()
 	print("Ghost is now chasing the player.")
 
 ### Pohyb ducha smerom k cieľu
@@ -145,3 +181,52 @@ func update_scatter_target():
 
 	navigation_agent_2d.target_position = movement_targets.scatter_targets[current_scatter_index].position
 	current_scatter_index = (current_scatter_index + 1) % movement_targets.scatter_targets.size()
+
+### Signal handler: Scatter timer timeout
+func _on_scatter_timer_timeout():
+	if current_state == GhostState.SCATTER:
+		start_chasing_pacman()
+		print("Ghost switching from SCATTER to CHASE state.")
+
+### Signal handler: Run away timer timeout
+func _on_run_away_timer_timeout():
+	if current_state == GhostState.RUN_AWAY:
+		body_sprite.stop_blinking()
+		body_sprite.move()
+		current_state = GhostState.CHASE
+		run_away_timeout.emit()  # Emit signal for pellets_manager
+		print("Ghost run away time expired. Switching to CHASE state.")
+		start_chasing_pacman()
+
+### Signal handler: Update chasing target position
+func _on_update_chasing_target_position_timer_timeout():
+	if current_state == GhostState.CHASE and chasing_target != null:
+		navigation_agent_2d.target_position = chasing_target.position
+
+### Signal handler: Body entered collision
+func _on_body_entered(body):
+	if body is Player:
+		if current_state == GhostState.RUN_AWAY:
+			# Ghost is eaten by player
+			print("Ghost eaten by player!")
+			current_state = GhostState.EATEN
+			body_sprite.hide()
+			eyes_sprite.show_eyes()
+			set_collision_mask_value(LAYER_PLAYER, false)  # Disable collision while eaten
+			run_away_timer.stop()
+			# Navigate back home
+			navigation_agent_2d.target_position = starting_position.position
+			# Wait before respawning
+			if get_tree():
+				await get_tree().create_timer(0.5).timeout
+			respawn_body_at_home()
+		elif current_state != GhostState.EATEN:
+			# Player is caught by ghost
+			print("Player caught by ghost!")
+			body.die()
+
+### Signal handler: At home timer timeout
+func _on_at_home_timer_timeout():
+	if current_state == GhostState.STARTING_AT_HOME:
+		print("Ghost leaving home area, starting to chase.")
+		start_chasing_pacman()
