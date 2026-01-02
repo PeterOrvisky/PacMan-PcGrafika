@@ -5,6 +5,11 @@ class_name Ghost
 # Signal emitted when run away timer times out
 signal run_away_timeout
 
+# Collision layer constants (from project settings)
+const LAYER_PLAYER = 1
+const LAYER_WALL = 2
+const LAYER_GHOST = 5
+
 # ENUM pre stavy ducha
 enum GhostState {
 	SCATTER,
@@ -28,7 +33,7 @@ enum GhostState {
 @onready var body_sprite = $BodySprite
 @onready var navigation_agent_2d = $NavigationAgent2D
 @onready var scatter_timer = $ScatterTimer
-@ontml:parameter name="run_away_timer = $RunAwayTimer
+@onready var run_away_timer = $RunAwayTimer
 @onready var update_chasing_target_position_timer = $UpdateChasingTargetPositionTimer
 @onready var at_home_timer = $AtHomeTimer
 
@@ -83,9 +88,9 @@ func setup():
 	position = starting_position.position
 	current_state = GhostState.SCATTER
 
-	# Povolenie kolízií
-	set_collision_layer_value(1, true)
-	set_collision_mask_value(1, true)
+	# Povolenie kolízií (enable collision with player)
+	set_collision_layer_value(LAYER_PLAYER, true)
+	set_collision_mask_value(LAYER_PLAYER, true)
 
 	eyes_sprite.show_eyes()
 	body_sprite.move()
@@ -132,10 +137,10 @@ func respawn_body_at_home():
 	body_sprite.show()
 	body_sprite.move()
 	eyes_sprite.show_eyes()
-	set_collision_mask_value(1, false)
+	set_collision_mask_value(LAYER_PLAYER, false)  # Temporarily disable collision during respawn
 
-	await get_tree().create_timer(1.5).timeout  # Ochranná doba
-	set_collision_mask_value(1, true)
+	await get_tree().create_timer(1.5).timeout  # Ochranná doba (protection period)
+	set_collision_mask_value(LAYER_PLAYER, true)  # Re-enable collision with player
 	start_chasing_pacman()
 
 ### Pohyb do štartovacej oblasti
@@ -207,11 +212,13 @@ func _on_body_entered(body):
 			current_state = GhostState.EATEN
 			body_sprite.hide()
 			eyes_sprite.show_eyes()
-			set_collision_mask_value(1, false)
+			set_collision_mask_value(LAYER_PLAYER, false)  # Disable collision while eaten
 			run_away_timer.stop()
 			# Navigate back home
 			navigation_agent_2d.target_position = starting_position.position
-			await get_tree().create_timer(0.5).timeout
+			# Wait before respawning
+			if get_tree():
+				await get_tree().create_timer(0.5).timeout
 			respawn_body_at_home()
 		elif current_state != GhostState.EATEN:
 			# Player is caught by ghost
