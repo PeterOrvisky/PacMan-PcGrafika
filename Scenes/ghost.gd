@@ -28,7 +28,9 @@ enum GhostState {
 @onready var body_sprite = $BodySprite
 @onready var navigation_agent_2d = $NavigationAgent2D
 @onready var scatter_timer = $ScatterTimer
-@onready var run_away_timer = $RunAwayTimer
+@ontml:parameter name="run_away_timer = $RunAwayTimer
+@onready var update_chasing_target_position_timer = $UpdateChasingTargetPositionTimer
+@onready var at_home_timer = $AtHomeTimer
 
 var current_state: GhostState = GhostState.SCATTER
 var current_scatter_index = 0
@@ -46,9 +48,31 @@ func _process(delta):
 
 ### Nastavenie ducha
 func setup():
+	# If movement_targets resource not assigned, try to find markers from scene
 	if movement_targets == null:
-		push_error("Setup failed! movement_targets not assigned.")
-		return
+		print("Movement targets resource not assigned, attempting to find from scene nodes...")
+		# Try to find movement target nodes based on ghost name
+		var ghost_name = name  # e.g., "RedGhost", "YellowGhost"
+		var targets_path = "../../MovementTargets/" + ghost_name
+		var targets_node = get_node_or_null(targets_path)
+		if targets_node:
+			# Create a runtime movement targets object
+			movement_targets = MovementTargets.new()
+			
+			# Get scatter targets
+			var scatter_node = targets_node.get_node_or_null("Scatter")
+			if scatter_node:
+				movement_targets.scatter_targets = scatter_node.get_children()
+			
+			# Get at home targets
+			var home_node = targets_node.get_node_or_null("Home")
+			if home_node:
+				movement_targets.at_home_targets = home_node.get_children()
+			
+			print("Movement targets loaded from scene for " + ghost_name)
+		else:
+			push_error("Setup failed! Could not find movement targets for " + ghost_name)
+			return
 
 	# Inicializácia navigácie
 	if tile_map:
@@ -78,6 +102,7 @@ func scatter():
 		return
 
 	current_state = GhostState.SCATTER
+	update_chasing_target_position_timer.stop()  # Stop chase timer during scatter
 	update_scatter_target()
 	scatter_timer.start()
 
@@ -96,6 +121,7 @@ func run_away_from_pacman():
 	run_away_timer.start()
 	current_state = GhostState.RUN_AWAY
 	body_sprite.start_blinking()
+	update_chasing_target_position_timer.stop()  # Stop chase timer when running away
 	print("Ghost set to RUN_AWAY state.")
 	update_scatter_target()
 
@@ -123,6 +149,7 @@ func start_at_home():
 
 	# Nastavenie cieľa pre navigáciu v agentovi
 	navigation_agent_2d.target_position = movement_targets.at_home_targets[current_at_home_index].position
+	at_home_timer.start()  # Start timer to eventually leave home
 	print("Ghost moving within home area.")
 
 ### Prenasledovanie pacmana (CHASE stav)
@@ -132,6 +159,7 @@ func start_chasing_pacman():
 		return
 	current_state = GhostState.CHASE
 	navigation_agent_2d.target_position = chasing_target.position
+	update_chasing_target_position_timer.start()
 	print("Ghost is now chasing the player.")
 
 ### Pohyb ducha smerom k cieľu
@@ -189,3 +217,9 @@ func _on_body_entered(body):
 			# Player is caught by ghost
 			print("Player caught by ghost!")
 			body.die()
+
+### Signal handler: At home timer timeout
+func _on_at_home_timer_timeout():
+	if current_state == GhostState.STARTING_AT_HOME:
+		print("Ghost leaving home area, starting to chase.")
+		start_chasing_pacman()
